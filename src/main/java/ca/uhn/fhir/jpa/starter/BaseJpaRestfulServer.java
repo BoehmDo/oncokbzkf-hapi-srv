@@ -241,6 +241,13 @@ public class BaseJpaRestfulServer extends RestfulServer {
     this.registerInterceptor(loggingInterceptor);
 
     /*
+     * This Interceptor handles Authorization for read and write requests. Only authorized
+     * organizations are supposed to upload data to the BZKF Fhir Server with the correct
+     * Tool.
+     */
+    WriteAuthorizationInterceptor authorizationInterceptor = new WriteAuthorizationInterceptor();
+    this.registerInterceptor(authorizationInterceptor);
+    /*
      * If you are hosting this server at a specific DNS name, the server will try to
      * figure out the FHIR base URL based on what the web container tells it, but
      * this doesn't always work. If you are setting links in your search bundles that
