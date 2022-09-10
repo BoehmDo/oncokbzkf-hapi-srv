@@ -47,12 +47,12 @@ public class WriteAuthorizationInterceptor extends AuthorizationInterceptor {
       }
 
       /*
-       * Get valid usernames and passwords for write access from environment variable
+       * Get valid usernames and passwords for write access from config files
        */
       Map<String, String> writeUserMap = new HashMap<String, String>();
       Map<String, String> readUserMap = new HashMap<String, String>();
-      Path writeCredPath = Paths.get("/config/writecredentials.json");
-      Path readCredPath = Paths.get("/config/readcredentials.json");
+      Path writeCredPath = Paths.get("config/writecredentials.json");
+      Path readCredPath = Paths.get("config/readcredentials.json");
       String writeCredFileString = null;
       String readCredFileString = null;
       try {
