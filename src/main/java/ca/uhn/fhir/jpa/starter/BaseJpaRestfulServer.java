@@ -51,7 +51,7 @@ import java.util.stream.Collectors;
 public class BaseJpaRestfulServer extends RestfulServer {
   private static final org.slf4j.Logger ourLog = org.slf4j.LoggerFactory.getLogger(BaseJpaRestfulServer.class);
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
   @Autowired
   DaoRegistry daoRegistry;
   @Autowired
@@ -133,20 +133,24 @@ public class BaseJpaRestfulServer extends RestfulServer {
     setFhirContext(fhirSystemDao.getContext());
 
     /*
-     * Order matters - the MDM provider registers itself on the resourceProviderFactory - hence the loading must be done
+     * Order matters - the MDM provider registers itself on the
+     * resourceProviderFactory - hence the loading must be done
      * ahead of provider registration
      */
-    if(appProperties.getMdm_enabled())
-    	mdmProviderProvider.get().loadProvider();
+    if (appProperties.getMdm_enabled())
+      mdmProviderProvider.get().loadProvider();
 
     registerProviders(resourceProviderFactory.createProviders());
     registerProvider(jpaSystemProvider);
     /*
-     * The conformance provider exports the supported resources, search parameters, etc for
-     * this server. The JPA version adds resourceProviders counts to the exported statement, so it
+     * The conformance provider exports the supported resources, search parameters,
+     * etc for
+     * this server. The JPA version adds resourceProviders counts to the exported
+     * statement, so it
      * is a nice addition.
      *
-     * You can also create your own subclass of the conformance provider if you need to
+     * You can also create your own subclass of the conformance provider if you need
+     * to
      * provide further customization of your server's CapabilityStatement
      */
 
@@ -154,26 +158,26 @@ public class BaseJpaRestfulServer extends RestfulServer {
     if (fhirVersion == FhirVersionEnum.DSTU2) {
 
       JpaConformanceProviderDstu2 confProvider = new JpaConformanceProviderDstu2(this, fhirSystemDao,
-        daoConfig);
+          daoConfig);
       confProvider.setImplementationDescription("HAPI FHIR DSTU2 Server");
       setServerConformanceProvider(confProvider);
     } else {
       if (fhirVersion == FhirVersionEnum.DSTU3) {
 
         JpaConformanceProviderDstu3 confProvider = new JpaConformanceProviderDstu3(this, fhirSystemDao,
-          daoConfig, searchParamRegistry);
+            daoConfig, searchParamRegistry);
         confProvider.setImplementationDescription("HAPI FHIR DSTU3 Server");
         setServerConformanceProvider(confProvider);
       } else if (fhirVersion == FhirVersionEnum.R4) {
 
-				JpaCapabilityStatementProvider confProvider = new JpaCapabilityStatementProvider(this, fhirSystemDao,
-					daoConfig, searchParamRegistry, myValidationSupport);
+        JpaCapabilityStatementProvider confProvider = new JpaCapabilityStatementProvider(this, fhirSystemDao,
+            daoConfig, searchParamRegistry, myValidationSupport);
         confProvider.setImplementationDescription("HAPI FHIR R4 Server");
         setServerConformanceProvider(confProvider);
       } else if (fhirVersion == FhirVersionEnum.R5) {
 
-				JpaCapabilityStatementProvider confProvider = new JpaCapabilityStatementProvider(this, fhirSystemDao,
-					daoConfig, searchParamRegistry, myValidationSupport);
+        JpaCapabilityStatementProvider confProvider = new JpaCapabilityStatementProvider(this, fhirSystemDao,
+            daoConfig, searchParamRegistry, myValidationSupport);
         confProvider.setImplementationDescription("HAPI FHIR R5 Server");
         setServerConformanceProvider(confProvider);
       } else {
@@ -188,15 +192,13 @@ public class BaseJpaRestfulServer extends RestfulServer {
     if (appProperties.getEtag_support_enabled() == false)
       setETagSupport(ETagSupportEnum.DISABLED);
 
-
     /*
      * This server tries to dynamically generate narratives
      */
     FhirContext ctx = getFhirContext();
-    INarrativeGenerator theNarrativeGenerator =
-      appProperties.getNarrative_enabled() ?
-      new DefaultThymeleafNarrativeGenerator() :
-      new NullNarrativeGenerator();
+    INarrativeGenerator theNarrativeGenerator = appProperties.getNarrative_enabled()
+        ? new DefaultThymeleafNarrativeGenerator()
+        : new NullNarrativeGenerator();
     ctx.setNarrativeGenerator(theNarrativeGenerator);
 
     /*
@@ -241,8 +243,10 @@ public class BaseJpaRestfulServer extends RestfulServer {
     this.registerInterceptor(loggingInterceptor);
 
     /*
-     * This Interceptor handles Authorization for read and write requests. Only authorized
-     * organizations are supposed to upload data to the BZKF Fhir Server with the correct
+     * This Interceptor handles Authorization for read and write requests. Only
+     * authorized
+     * organizations are supposed to upload data to the BZKF Fhir Server with the
+     * correct
      * Tool.
      */
     WriteAuthorizationInterceptor authorizationInterceptor = new WriteAuthorizationInterceptor();
@@ -250,7 +254,8 @@ public class BaseJpaRestfulServer extends RestfulServer {
     /*
      * If you are hosting this server at a specific DNS name, the server will try to
      * figure out the FHIR base URL based on what the web container tells it, but
-     * this doesn't always work. If you are setting links in your search bundles that
+     * this doesn't always work. If you are setting links in your search bundles
+     * that
      * just refer to "localhost", you might want to use a server address strategy:
      */
     String serverAddress = appProperties.getServer_address();
@@ -258,17 +263,20 @@ public class BaseJpaRestfulServer extends RestfulServer {
       setServerAddressStrategy(new HardcodedServerAddressStrategy(serverAddress));
     } else if (appProperties.getUse_apache_address_strategy()) {
       boolean useHttps = appProperties.getUse_apache_address_strategy_https();
-      setServerAddressStrategy(useHttps ? ApacheProxyAddressStrategy.forHttps() :
-                    ApacheProxyAddressStrategy.forHttp());
+      setServerAddressStrategy(useHttps ? ApacheProxyAddressStrategy.forHttps() : ApacheProxyAddressStrategy.forHttp());
     } else {
       setServerAddressStrategy(new IncomingRequestAddressStrategy());
     }
 
     /*
-     * If you are using DSTU3+, you may want to add a terminology uploader, which allows
-     * uploading of external terminologies such as Snomed CT. Note that this uploader
-     * does not have any security attached (any anonymous user may use it by default)
-     * so it is a potential security vulnerability. Consider using an AuthorizationInterceptor
+     * If you are using DSTU3+, you may want to add a terminology uploader, which
+     * allows
+     * uploading of external terminologies such as Snomed CT. Note that this
+     * uploader
+     * does not have any security attached (any anonymous user may use it by
+     * default)
+     * so it is a potential security vulnerability. Consider using an
+     * AuthorizationInterceptor
      * with this feature.
      */
     if (ctx.getVersion().getVersion().isEqualOrNewerThan(FhirVersionEnum.DSTU3)) { // <-- ENABLED RIGHT NOW
@@ -285,7 +293,7 @@ public class BaseJpaRestfulServer extends RestfulServer {
     // showing a typical setup. You should customize this
     // to your specific needs
     if (appProperties.getCors() != null) {
-    	ourLog.info("CORS is enabled on this server");
+      ourLog.info("CORS is enabled on this server");
       CorsConfiguration config = new CorsConfiguration();
       config.addAllowedHeader(HttpHeaders.ORIGIN);
       config.addAllowedHeader(HttpHeaders.ACCEPT);
@@ -303,15 +311,15 @@ public class BaseJpaRestfulServer extends RestfulServer {
       config.addExposedHeader("Location");
       config.addExposedHeader("Content-Location");
       config.setAllowedMethods(
-        Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD"));
+          Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD"));
       config.setAllowCredentials(appProperties.getCors().getAllow_Credentials());
 
       // Create the interceptor and register it
       CorsInterceptor interceptor = new CorsInterceptor(config);
       registerInterceptor(interceptor);
     } else {
-    	ourLog.info("CORS is disabled on this server");
-	 }
+      ourLog.info("CORS is disabled on this server");
+    }
 
     // If subscriptions are enabled, we want to register the interceptor that
     // will activate them and match results against them
@@ -322,10 +330,9 @@ public class BaseJpaRestfulServer extends RestfulServer {
 
     // Cascading deletes
 
-
     if (appProperties.getAllow_cascading_deletes()) {
       CascadingDeleteInterceptor cascadingDeleteInterceptor = new CascadingDeleteInterceptor(ctx,
-        daoRegistry, interceptorBroadcaster);
+          daoRegistry, interceptorBroadcaster);
       getInterceptorService().registerInterceptor(cascadingDeleteInterceptor);
     }
 
@@ -360,30 +367,31 @@ public class BaseJpaRestfulServer extends RestfulServer {
     }
 
     if (appProperties.getAllowed_bundle_types() != null) {
-      daoConfig.setBundleTypesAllowedForStorage(appProperties.getAllowed_bundle_types().stream().map(BundleType::toCode).collect(Collectors.toSet()));
+      daoConfig.setBundleTypesAllowedForStorage(
+          appProperties.getAllowed_bundle_types().stream().map(BundleType::toCode).collect(Collectors.toSet()));
     }
 
     daoConfig.setDeferIndexingForCodesystemsOfSize(appProperties.getDefer_indexing_for_codesystems_of_size());
 
-	 if (appProperties.getOpenapi_enabled()) {
-		registerInterceptor(new OpenApiInterceptor());
-	}
+    if (appProperties.getOpenapi_enabled()) {
+      registerInterceptor(new OpenApiInterceptor());
+    }
 
     // Bulk Export
     if (appProperties.getBulk_export_enabled()) {
       registerProvider(bulkDataExportProvider);
     }
 
-    //Bulk Import
+    // Bulk Import
     if (appProperties.getBulk_import_enabled()) {
       registerProvider(bulkDataImportProvider);
     }
 
     // valueSet Operations i.e $expand
-	 registerProvider(myValueSetOperationProvider);
+    registerProvider(myValueSetOperationProvider);
 
-	 //reindex Provider $reindex
-	 registerProvider(reindexProvider);
+    // reindex Provider $reindex
+    registerProvider(reindexProvider);
 
     // Partitioning
     if (appProperties.getPartitioning() != null) {
@@ -396,41 +404,41 @@ public class BaseJpaRestfulServer extends RestfulServer {
       daoConfig.setResourceServerIdStrategy(DaoConfig.IdStrategyEnum.UUID);
       daoConfig.setResourceClientIdStrategy(appProperties.getClient_id_strategy());
     }
-    //Parallel Batch GET execution settings
-  	 daoConfig.setBundleBatchPoolSize(appProperties.getBundle_batch_pool_size());
-  	 daoConfig.setBundleBatchPoolSize(appProperties.getBundle_batch_pool_max_size());
+    // Parallel Batch GET execution settings
+    daoConfig.setBundleBatchPoolSize(appProperties.getBundle_batch_pool_size());
+    daoConfig.setBundleBatchPoolSize(appProperties.getBundle_batch_pool_max_size());
 
     if (appProperties.getImplementationGuides() != null) {
       Map<String, AppProperties.ImplementationGuide> guides = appProperties.getImplementationGuides();
       for (Map.Entry<String, AppProperties.ImplementationGuide> guide : guides.entrySet()) {
-			PackageInstallationSpec packageInstallationSpec = new PackageInstallationSpec()
-				.setPackageUrl(guide.getValue().getUrl())
-				.setName(guide.getValue().getName())
-				.setVersion(guide.getValue().getVersion())
-				.setInstallMode(PackageInstallationSpec.InstallModeEnum.STORE_AND_INSTALL);
-			if(appProperties.getInstall_transitive_ig_dependencies()) {
-				packageInstallationSpec.setFetchDependencies(true);
-				packageInstallationSpec.setDependencyExcludes(ImmutableList.of("hl7.fhir.r2.core", "hl7.fhir.r3.core", "hl7.fhir.r4.core", "hl7.fhir.r5.core"));
-			}
-			packageInstallerSvc.install(packageInstallationSpec);
+        PackageInstallationSpec packageInstallationSpec = new PackageInstallationSpec()
+            .setPackageUrl(guide.getValue().getUrl())
+            .setName(guide.getValue().getName())
+            .setVersion(guide.getValue().getVersion())
+            .setInstallMode(PackageInstallationSpec.InstallModeEnum.STORE_AND_INSTALL);
+        if (appProperties.getInstall_transitive_ig_dependencies()) {
+          packageInstallationSpec.setFetchDependencies(true);
+          packageInstallationSpec.setDependencyExcludes(
+              ImmutableList.of("hl7.fhir.r2.core", "hl7.fhir.r3.core", "hl7.fhir.r4.core", "hl7.fhir.r5.core"));
+        }
+        packageInstallerSvc.install(packageInstallationSpec);
       }
     }
 
-    if(factory != null) {
-		 interceptorService.registerInterceptor(factory.buildUsingStoredStructureDefinitions());
-	 }
-
+    if (factory != null) {
+      interceptorService.registerInterceptor(factory.buildUsingStoredStructureDefinitions());
+    }
 
     if (appProperties.getLastn_enabled()) {
       daoConfig.setLastNEnabled(true);
     }
 
-	 if(appProperties.getInline_resource_storage_below_size() != 0){
-		 daoConfig.setInlineResourceTextBelowSize(appProperties.getInline_resource_storage_below_size());
-	 }
+    if (appProperties.getInline_resource_storage_below_size() != 0) {
+      daoConfig.setInlineResourceTextBelowSize(appProperties.getInline_resource_storage_below_size());
+    }
 
-	 daoConfig.setStoreResourceInHSearchIndex(appProperties.getStore_resource_in_lucene_index_enabled());
+    daoConfig.setStoreResourceInHSearchIndex(appProperties.getStore_resource_in_lucene_index_enabled());
     daoConfig.getModelConfig().setNormalizedQuantitySearchLevel(appProperties.getNormalized_quantity_search_level());
-	 daoConfig.getModelConfig().setIndexOnContainedResources(appProperties.getEnable_index_contained_resource());
+    daoConfig.getModelConfig().setIndexOnContainedResources(appProperties.getEnable_index_contained_resource());
   }
 }
