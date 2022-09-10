@@ -32,14 +32,13 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = Application.class, properties =
-  {
-     "spring.batch.job.enabled=false",
-     "spring.datasource.url=jdbc:h2:mem:dbr5",
-     "hapi.fhir.fhir_version=r5",
-     "hapi.fhir.subscription.websocket_enabled=true",
-	  "hapi.fhir.subscription.websocket_enabled=true",
-  })
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = Application.class, properties = {
+    "spring.batch.job.enabled=false",
+    "spring.datasource.url=jdbc:h2:mem:dbr5",
+    "hapi.fhir.fhir_version=r5",
+    "hapi.fhir.subscription.websocket_enabled=true",
+    "hapi.fhir.subscription.websocket_enabled=true",
+})
 public class ExampleServerR5IT {
 
   private static final org.slf4j.Logger ourLog = org.slf4j.LoggerFactory.getLogger(ExampleServerDstu2IT.class);
@@ -48,7 +47,6 @@ public class ExampleServerR5IT {
 
   @LocalServerPort
   private int port;
-
 
   @Test
   public void testCreateAndRead() {
@@ -82,22 +80,26 @@ public class ExampleServerR5IT {
     subscription.setReason("Monitor new neonatal function (note, age will be determined by the monitor)");
     subscription.setStatus(Enumerations.SubscriptionState.REQUESTED);
     subscription.getChannelType()
-      .setSystem("http://terminology.hl7.org/CodeSystem/subscription-channel-type")
-      .setCode("websocket");
+        .setSystem("http://terminology.hl7.org/CodeSystem/subscription-channel-type")
+        .setCode("websocket");
     subscription.setContentType("application/json");
 
     MethodOutcome methodOutcome = ourClient.create().resource(subscription).execute();
     IIdType mySubscriptionId = methodOutcome.getId();
 
     // Wait for the subscription to be activated
-    waitForSize(1, () -> ourClient.search().forResource(Subscription.class).where(Subscription.STATUS.exactly().code("active")).cacheControl(new CacheControlDirective().setNoCache(true)).returnBundle(Bundle.class).execute().getEntry().size());
+    waitForSize(1,
+        () -> ourClient.search().forResource(Subscription.class).where(Subscription.STATUS.exactly().code("active"))
+            .cacheControl(new CacheControlDirective().setNoCache(true)).returnBundle(Bundle.class).execute().getEntry()
+            .size());
 
     /*
      * Attach websocket
      */
 
     WebSocketClient myWebSocketClient = new WebSocketClient();
-    SocketImplementation mySocketImplementation = new SocketImplementation(mySubscriptionId.getIdPart(), EncodingEnum.JSON);
+    SocketImplementation mySocketImplementation = new SocketImplementation(mySubscriptionId.getIdPart(),
+        EncodingEnum.JSON);
 
     myWebSocketClient.start();
     URI echoUri = new URI("ws://localhost:" + port + "/websocket");

@@ -18,7 +18,7 @@ public class JpaHibernatePropertiesProvider extends HibernatePropertiesProvider 
     DataSource connection = myEntityManagerFactory.getDataSource();
     try {
       dialect = new StandardDialectResolver()
-        .resolveDialect(new DatabaseMetaDataDialectResolutionInfoAdapter(connection.getConnection().getMetaData()));
+          .resolveDialect(new DatabaseMetaDataDialectResolutionInfoAdapter(connection.getConnection().getMetaData()));
     } catch (SQLException sqlException) {
       throw new ConfigurationException(sqlException.getMessage(), sqlException);
     }

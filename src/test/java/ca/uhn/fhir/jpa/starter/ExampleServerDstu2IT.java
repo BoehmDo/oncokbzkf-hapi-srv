@@ -16,22 +16,21 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = Application.class, properties =
-  {
-     "spring.batch.job.enabled=false",
-     "hapi.fhir.fhir_version=dstu2",
-     "spring.datasource.url=jdbc:h2:mem:dbr2",
-  })
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = Application.class, properties = {
+		"spring.batch.job.enabled=false",
+		"hapi.fhir.fhir_version=dstu2",
+		"spring.datasource.url=jdbc:h2:mem:dbr2",
+})
 public class ExampleServerDstu2IT {
 
 	private static final org.slf4j.Logger ourLog = org.slf4j.LoggerFactory.getLogger(ExampleServerDstu2IT.class);
 	private IGenericClient ourClient;
 	private FhirContext ourCtx;
 
-  @LocalServerPort
-  private int port;
+	@LocalServerPort
+	private int port;
 
-  @Test
+	@Test
 	void testCreateAndRead() {
 
 		String methodName = "testCreateResourceConditional";
@@ -43,11 +42,10 @@ public class ExampleServerDstu2IT {
 		assertEquals(methodName, pt2.getName().get(0).getFamily().get(0).getValue());
 	}
 
-
 	@BeforeEach
 	void beforeEach() {
 
-    ourCtx = FhirContext.forDstu2();
+		ourCtx = FhirContext.forDstu2();
 		ourCtx.getRestfulClientFactory().setServerValidationMode(ServerValidationModeEnum.NEVER);
 		ourCtx.getRestfulClientFactory().setSocketTimeout(1200 * 1000);
 		String ourServerBase = "http://localhost:" + port + "/fhir/";

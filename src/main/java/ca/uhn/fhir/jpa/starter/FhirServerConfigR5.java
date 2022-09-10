@@ -9,9 +9,9 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @Conditional(OnR5Condition.class)
 @Import({
-	StarterJpaConfig.class,
-	JpaR5Config.class,
-	ElasticsearchConfig.class
+		StarterJpaConfig.class,
+		JpaR5Config.class,
+		ElasticsearchConfig.class
 })
 public class FhirServerConfigR5 {
 }

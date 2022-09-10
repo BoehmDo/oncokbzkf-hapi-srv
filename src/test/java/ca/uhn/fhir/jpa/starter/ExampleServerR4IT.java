@@ -75,13 +75,14 @@ class ExampleServerR4IT {
 
 		// Verify that a golden record Patient was created
 		assertNotNull(
-			goldenRecord.getMeta().getTag("http://hapifhir.io/fhir/NamingSystem/mdm-record-status", "GOLDEN_RECORD"));
+				goldenRecord.getMeta().getTag("http://hapifhir.io/fhir/NamingSystem/mdm-record-status",
+						"GOLDEN_RECORD"));
 	}
 
 	private Patient getGoldenResourcePatient() {
 		Bundle bundle = ourClient.search().forResource(Patient.class)
-			.withTag("http://hapifhir.io/fhir/NamingSystem/mdm-record-status", "GOLDEN_RECORD")
-			.cacheControl(new CacheControlDirective().setNoCache(true)).returnBundle(Bundle.class).execute();
+				.withTag("http://hapifhir.io/fhir/NamingSystem/mdm-record-status", "GOLDEN_RECORD")
+				.cacheControl(new CacheControlDirective().setNoCache(true)).returnBundle(Bundle.class).execute();
 		if (bundle.getEntryFirstRep() != null) {
 			return (Patient) bundle.getEntryFirstRep().getResource();
 		} else {
@@ -92,50 +93,50 @@ class ExampleServerR4IT {
 	@Test
 	public void testBatchPutWithIdenticalTags() {
 		String batchPuts = "{\n" +
-			"\t\"resourceType\": \"Bundle\",\n" +
-			"\t\"id\": \"patients\",\n" +
-			"\t\"type\": \"batch\",\n" +
-			"\t\"entry\": [\n" +
-			"\t\t{\n" +
-			"\t\t\t\"request\": {\n" +
-			"\t\t\t\t\"method\": \"PUT\",\n" +
-			"\t\t\t\t\"url\": \"Patient/pat-1\"\n" +
-			"\t\t\t},\n" +
-			"\t\t\t\"resource\": {\n" +
-			"\t\t\t\t\"resourceType\": \"Patient\",\n" +
-			"\t\t\t\t\"id\": \"pat-1\",\n" +
-			"\t\t\t\t\"meta\": {\n" +
-			"\t\t\t\t\t\"tag\": [\n" +
-			"\t\t\t\t\t\t{\n" +
-			"\t\t\t\t\t\t\t\"system\": \"http://mysystem.org\",\n" +
-			"\t\t\t\t\t\t\t\"code\": \"value2\"\n" +
-			"\t\t\t\t\t\t}\n" +
-			"\t\t\t\t\t]\n" +
-			"\t\t\t\t}\n" +
-			"\t\t\t},\n" +
-			"\t\t\t\"fullUrl\": \"/Patient/pat-1\"\n" +
-			"\t\t},\n" +
-			"\t\t{\n" +
-			"\t\t\t\"request\": {\n" +
-			"\t\t\t\t\"method\": \"PUT\",\n" +
-			"\t\t\t\t\"url\": \"Patient/pat-2\"\n" +
-			"\t\t\t},\n" +
-			"\t\t\t\"resource\": {\n" +
-			"\t\t\t\t\"resourceType\": \"Patient\",\n" +
-			"\t\t\t\t\"id\": \"pat-2\",\n" +
-			"\t\t\t\t\"meta\": {\n" +
-			"\t\t\t\t\t\"tag\": [\n" +
-			"\t\t\t\t\t\t{\n" +
-			"\t\t\t\t\t\t\t\"system\": \"http://mysystem.org\",\n" +
-			"\t\t\t\t\t\t\t\"code\": \"value2\"\n" +
-			"\t\t\t\t\t\t}\n" +
-			"\t\t\t\t\t]\n" +
-			"\t\t\t\t}\n" +
-			"\t\t\t},\n" +
-			"\t\t\t\"fullUrl\": \"/Patient/pat-2\"\n" +
-			"\t\t}\n" +
-			"\t]\n" +
-			"}";
+				"\t\"resourceType\": \"Bundle\",\n" +
+				"\t\"id\": \"patients\",\n" +
+				"\t\"type\": \"batch\",\n" +
+				"\t\"entry\": [\n" +
+				"\t\t{\n" +
+				"\t\t\t\"request\": {\n" +
+				"\t\t\t\t\"method\": \"PUT\",\n" +
+				"\t\t\t\t\"url\": \"Patient/pat-1\"\n" +
+				"\t\t\t},\n" +
+				"\t\t\t\"resource\": {\n" +
+				"\t\t\t\t\"resourceType\": \"Patient\",\n" +
+				"\t\t\t\t\"id\": \"pat-1\",\n" +
+				"\t\t\t\t\"meta\": {\n" +
+				"\t\t\t\t\t\"tag\": [\n" +
+				"\t\t\t\t\t\t{\n" +
+				"\t\t\t\t\t\t\t\"system\": \"http://mysystem.org\",\n" +
+				"\t\t\t\t\t\t\t\"code\": \"value2\"\n" +
+				"\t\t\t\t\t\t}\n" +
+				"\t\t\t\t\t]\n" +
+				"\t\t\t\t}\n" +
+				"\t\t\t},\n" +
+				"\t\t\t\"fullUrl\": \"/Patient/pat-1\"\n" +
+				"\t\t},\n" +
+				"\t\t{\n" +
+				"\t\t\t\"request\": {\n" +
+				"\t\t\t\t\"method\": \"PUT\",\n" +
+				"\t\t\t\t\"url\": \"Patient/pat-2\"\n" +
+				"\t\t\t},\n" +
+				"\t\t\t\"resource\": {\n" +
+				"\t\t\t\t\"resourceType\": \"Patient\",\n" +
+				"\t\t\t\t\"id\": \"pat-2\",\n" +
+				"\t\t\t\t\"meta\": {\n" +
+				"\t\t\t\t\t\"tag\": [\n" +
+				"\t\t\t\t\t\t{\n" +
+				"\t\t\t\t\t\t\t\"system\": \"http://mysystem.org\",\n" +
+				"\t\t\t\t\t\t\t\"code\": \"value2\"\n" +
+				"\t\t\t\t\t\t}\n" +
+				"\t\t\t\t\t]\n" +
+				"\t\t\t\t}\n" +
+				"\t\t\t},\n" +
+				"\t\t\t\"fullUrl\": \"/Patient/pat-2\"\n" +
+				"\t\t}\n" +
+				"\t]\n" +
+				"}";
 		Bundle bundle = FhirContext.forR4().newJsonParser().parseResource(Bundle.class, batchPuts);
 		ourClient.transaction().withBundle(bundle).execute();
 	}
@@ -168,7 +169,7 @@ class ExampleServerR4IT {
 
 		WebSocketClient myWebSocketClient = new WebSocketClient();
 		SocketImplementation mySocketImplementation = new SocketImplementation(mySubscriptionId.getIdPart(),
-			EncodingEnum.JSON);
+				EncodingEnum.JSON);
 
 		myWebSocketClient.start();
 		URI echoUri = new URI("ws://localhost:" + port + "/websocket");
@@ -199,8 +200,9 @@ class ExampleServerR4IT {
 
 	private int activeSubscriptionCount() {
 		return ourClient.search().forResource(Subscription.class).where(Subscription.STATUS.exactly().code("active"))
-			.cacheControl(new CacheControlDirective().setNoCache(true)).returnBundle(Bundle.class).execute().getEntry()
-			.size();
+				.cacheControl(new CacheControlDirective().setNoCache(true)).returnBundle(Bundle.class).execute()
+				.getEntry()
+				.size();
 	}
 
 	@BeforeEach

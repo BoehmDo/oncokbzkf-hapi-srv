@@ -20,10 +20,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * This class can be customized to enable the {@link ca.uhn.fhir.jpa.interceptor.validation.RepositoryValidatingInterceptor}
+ * This class can be customized to enable the
+ * {@link ca.uhn.fhir.jpa.interceptor.validation.RepositoryValidatingInterceptor}
  * on this server.
  * <p>
- * The <code>enable_repository_validating_interceptor</code> property must be enabled in <code>application.yaml</code>
+ * The <code>enable_repository_validating_interceptor</code> property must be
+ * enabled in <code>application.yaml</code>
  * in order to use this class.
  */
 @ConditionalOnProperty(prefix = "hapi.fhir", name = "enable_repository_validating_interceptor", havingValue = "true")
@@ -35,7 +37,8 @@ public class RepositoryValidationInterceptorFactoryR4 implements IRepositoryVali
 	private final RepositoryValidatingRuleBuilder repositoryValidatingRuleBuilder;
 	private final IFhirResourceDao structureDefinitionResourceProvider;
 
-	public RepositoryValidationInterceptorFactoryR4(RepositoryValidatingRuleBuilder repositoryValidatingRuleBuilder, DaoRegistry daoRegistry) {
+	public RepositoryValidationInterceptorFactoryR4(RepositoryValidatingRuleBuilder repositoryValidatingRuleBuilder,
+			DaoRegistry daoRegistry) {
 		this.repositoryValidatingRuleBuilder = repositoryValidatingRuleBuilder;
 		this.fhirContext = daoRegistry.getSystemDao().getContext();
 		structureDefinitionResourceProvider = daoRegistry.getResourceDao("StructureDefinition");
@@ -45,16 +48,18 @@ public class RepositoryValidationInterceptorFactoryR4 implements IRepositoryVali
 	@Override
 	public RepositoryValidatingInterceptor buildUsingStoredStructureDefinitions() {
 
-		IBundleProvider results = structureDefinitionResourceProvider.search(new SearchParameterMap().add(StructureDefinition.SP_KIND, new TokenParam("resource")));
+		IBundleProvider results = structureDefinitionResourceProvider
+				.search(new SearchParameterMap().add(StructureDefinition.SP_KIND, new TokenParam("resource")));
 		Map<String, List<StructureDefinition>> structureDefintions = results.getResources(0, results.size())
-			.stream()
-			.map(StructureDefinition.class::cast)
-			.collect(Collectors.groupingBy(StructureDefinition::getType));
+				.stream()
+				.map(StructureDefinition.class::cast)
+				.collect(Collectors.groupingBy(StructureDefinition::getType));
 
-		structureDefintions.entrySet().forEach(structureDefinitionListEntry ->
-		{
-			String[] urls = structureDefinitionListEntry.getValue().stream().map(StructureDefinition::getUrl).toArray(String[]::new);
-			repositoryValidatingRuleBuilder.forResourcesOfType(structureDefinitionListEntry.getKey()).requireAtLeastOneProfileOf(urls).and().requireValidationToDeclaredProfiles();
+		structureDefintions.entrySet().forEach(structureDefinitionListEntry -> {
+			String[] urls = structureDefinitionListEntry.getValue().stream().map(StructureDefinition::getUrl)
+					.toArray(String[]::new);
+			repositoryValidatingRuleBuilder.forResourcesOfType(structureDefinitionListEntry.getKey())
+					.requireAtLeastOneProfileOf(urls).and().requireValidationToDeclaredProfiles();
 		});
 
 		List<IRepositoryValidatingRule> rules = repositoryValidatingRuleBuilder.build();
@@ -64,9 +69,12 @@ public class RepositoryValidationInterceptorFactoryR4 implements IRepositoryVali
 	@Override
 	public RepositoryValidatingInterceptor build() {
 
-		// Customize the ruleBuilder here to have the rules you want! We will give a simple example
+		// Customize the ruleBuilder here to have the rules you want! We will give a
+		// simple example
 		// of enabling validation for all Patient resources
-		repositoryValidatingRuleBuilder.forResourcesOfType("Patient").requireAtLeastProfile("http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient").and().requireValidationToDeclaredProfiles();
+		repositoryValidatingRuleBuilder.forResourcesOfType("Patient")
+				.requireAtLeastProfile("http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient").and()
+				.requireValidationToDeclaredProfiles();
 
 		// Do not customize below this line
 		List<IRepositoryValidatingRule> rules = repositoryValidatingRuleBuilder.build();

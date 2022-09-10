@@ -24,16 +24,16 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.servlet.DispatcherServlet;
 
 @ServletComponentScan(basePackageClasses = {
-  JpaRestfulServer.class})
-@SpringBootApplication(exclude = {ElasticsearchRestClientAutoConfiguration.class})
+    JpaRestfulServer.class })
+@SpringBootApplication(exclude = { ElasticsearchRestClientAutoConfiguration.class })
 @Import({
-	SubscriptionSubmitterConfig.class,
-	SubscriptionProcessorConfig.class,
-	SubscriptionChannelConfig.class,
-	WebsocketDispatcherConfig.class,
-	MdmConfig.class,
-	JpaBatch2Config.class,
-	Batch2JobsConfig.class
+    SubscriptionSubmitterConfig.class,
+    SubscriptionProcessorConfig.class,
+    SubscriptionChannelConfig.class,
+    WebsocketDispatcherConfig.class,
+    MdmConfig.class,
+    JpaBatch2Config.class,
+    Batch2JobsConfig.class
 })
 public class Application extends SpringBootServletInitializer {
 
@@ -41,13 +41,13 @@ public class Application extends SpringBootServletInitializer {
 
     SpringApplication.run(Application.class, args);
 
-    //Server is now accessible at eg. http://localhost:8080/fhir/metadata
-    //UI is now accessible at http://localhost:8080/
+    // Server is now accessible at eg. http://localhost:8080/fhir/metadata
+    // UI is now accessible at http://localhost:8080/
   }
 
   @Override
   protected SpringApplicationBuilder configure(
-    SpringApplicationBuilder builder) {
+      SpringApplicationBuilder builder) {
     return builder.sources(Application.class);
   }
 
@@ -74,7 +74,7 @@ public class Application extends SpringBootServletInitializer {
     annotationConfigWebApplicationContext.register(FhirTesterConfig.class);
 
     DispatcherServlet dispatcherServlet = new DispatcherServlet(
-      annotationConfigWebApplicationContext);
+        annotationConfigWebApplicationContext);
     dispatcherServlet.setContextClass(AnnotationConfigWebApplicationContext.class);
     dispatcherServlet.setContextConfigLocation(FhirTesterConfig.class.getName());
 

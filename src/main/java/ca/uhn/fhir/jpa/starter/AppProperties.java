@@ -1,6 +1,5 @@
 package ca.uhn.fhir.jpa.starter;
 
-
 import ca.uhn.fhir.context.FhirVersionEnum;
 import ca.uhn.fhir.jpa.api.config.DaoConfig.ClientIdStrategyEnum;
 import ca.uhn.fhir.jpa.model.entity.NormalizedQuantitySearchLevel;
@@ -83,15 +82,15 @@ public class AppProperties {
   private Integer bundle_batch_pool_max_size = 100;
   private List<String> local_base_urls = new ArrayList<>();
 
-	public Boolean getOpenapi_enabled() {
-		return openapi_enabled;
-	}
+  public Boolean getOpenapi_enabled() {
+    return openapi_enabled;
+  }
 
-	public void setOpenapi_enabled(Boolean openapi_enabled) {
-		this.openapi_enabled = openapi_enabled;
-	}
+  public void setOpenapi_enabled(Boolean openapi_enabled) {
+    this.openapi_enabled = openapi_enabled;
+  }
 
-	public Boolean getUse_apache_address_strategy() {
+  public Boolean getUse_apache_address_strategy() {
     return use_apache_address_strategy;
   }
 
@@ -99,7 +98,7 @@ public class AppProperties {
     this.use_apache_address_strategy = use_apache_address_strategy;
   }
 
-    public Boolean getUse_apache_address_strategy_https() {
+  public Boolean getUse_apache_address_strategy_https() {
     return use_apache_address_strategy_https;
   }
 
@@ -203,11 +202,11 @@ public class AppProperties {
     this.supported_resource_types = supported_resource_types;
   }
 
-	public List<String> getSupported_resource_types(List<String> supported_resource_types) {
-		return this.supported_resource_types;
-	}
+  public List<String> getSupported_resource_types(List<String> supported_resource_types) {
+    return this.supported_resource_types;
+  }
 
-	public Logger getLogger() {
+  public Logger getLogger() {
     return logger;
   }
 
@@ -220,19 +219,19 @@ public class AppProperties {
   }
 
   public void setClient_id_strategy(
-    ClientIdStrategyEnum client_id_strategy) {
+      ClientIdStrategyEnum client_id_strategy) {
     this.client_id_strategy = client_id_strategy;
   }
 
-	public boolean getAdvanced_lucene_indexing() {
-		return this.advanced_lucene_indexing;
-	}
+  public boolean getAdvanced_lucene_indexing() {
+    return this.advanced_lucene_indexing;
+  }
 
-	public void setAdvanced_lucene_indexing(boolean theAdvanced_lucene_indexing) {
-		advanced_lucene_indexing = theAdvanced_lucene_indexing;
-	}
+  public void setAdvanced_lucene_indexing(boolean theAdvanced_lucene_indexing) {
+    advanced_lucene_indexing = theAdvanced_lucene_indexing;
+  }
 
-	public Boolean getAllow_cascading_deletes() {
+  public Boolean getAllow_cascading_deletes() {
     return allow_cascading_deletes;
   }
 
@@ -269,7 +268,7 @@ public class AppProperties {
   }
 
   public void setAllow_override_default_search_params(
-    Boolean allow_override_default_search_params) {
+      Boolean allow_override_default_search_params) {
     this.allow_override_default_search_params = allow_override_default_search_params;
   }
 
@@ -278,7 +277,7 @@ public class AppProperties {
   }
 
   public void setAuto_create_placeholder_reference_targets(
-    Boolean auto_create_placeholder_reference_targets) {
+      Boolean auto_create_placeholder_reference_targets) {
     this.auto_create_placeholder_reference_targets = auto_create_placeholder_reference_targets;
   }
 
@@ -314,28 +313,28 @@ public class AppProperties {
     this.enable_index_missing_fields = enable_index_missing_fields;
   }
 
-	public Boolean getEnable_index_contained_resource() {
-		return enable_index_contained_resource;
-	}
+  public Boolean getEnable_index_contained_resource() {
+    return enable_index_contained_resource;
+  }
 
-	public void setEnable_index_contained_resource(Boolean enable_index_contained_resource) {
-		this.enable_index_contained_resource = enable_index_contained_resource;
-	}
+  public void setEnable_index_contained_resource(Boolean enable_index_contained_resource) {
+    this.enable_index_contained_resource = enable_index_contained_resource;
+  }
 
-	public Boolean getEnable_repository_validating_interceptor() {
-		return enable_repository_validating_interceptor;
-	}
+  public Boolean getEnable_repository_validating_interceptor() {
+    return enable_repository_validating_interceptor;
+  }
 
-	public void setEnable_repository_validating_interceptor(Boolean theEnable_repository_validating_interceptor) {
-		enable_repository_validating_interceptor = theEnable_repository_validating_interceptor;
-	}
+  public void setEnable_repository_validating_interceptor(Boolean theEnable_repository_validating_interceptor) {
+    enable_repository_validating_interceptor = theEnable_repository_validating_interceptor;
+  }
 
-	public Boolean getEnforce_referential_integrity_on_delete() {
+  public Boolean getEnforce_referential_integrity_on_delete() {
     return enforce_referential_integrity_on_delete;
   }
 
   public void setEnforce_referential_integrity_on_delete(
-    Boolean enforce_referential_integrity_on_delete) {
+      Boolean enforce_referential_integrity_on_delete) {
     this.enforce_referential_integrity_on_delete = enforce_referential_integrity_on_delete;
   }
 
@@ -344,7 +343,7 @@ public class AppProperties {
   }
 
   public void setEnforce_referential_integrity_on_write(
-    Boolean enforce_referential_integrity_on_write) {
+      Boolean enforce_referential_integrity_on_write) {
     this.enforce_referential_integrity_on_write = enforce_referential_integrity_on_write;
   }
 
@@ -396,15 +395,15 @@ public class AppProperties {
     this.binary_storage_enabled = binary_storage_enabled;
   }
 
-	public Integer getInline_resource_storage_below_size() {
-		return inline_resource_storage_below_size;
-	}
+  public Integer getInline_resource_storage_below_size() {
+    return inline_resource_storage_below_size;
+  }
 
-	public void setInline_resource_storage_below_size(Integer inline_resource_storage_below_size) {
-		this.inline_resource_storage_below_size = inline_resource_storage_below_size;
-	}
+  public void setInline_resource_storage_below_size(Integer inline_resource_storage_below_size) {
+    this.inline_resource_storage_below_size = inline_resource_storage_below_size;
+  }
 
-	public Boolean getBulk_export_enabled() {
+  public Boolean getBulk_export_enabled() {
     return bulk_export_enabled;
   }
 
@@ -480,13 +479,11 @@ public class AppProperties {
     this.tester = tester;
   }
 
-  public Boolean getNarrative_enabled()
-  {
+  public Boolean getNarrative_enabled() {
     return narrative_enabled;
   }
 
-  public void setNarrative_enabled(Boolean narrative_enabled)
-  {
+  public void setNarrative_enabled(Boolean narrative_enabled) {
     this.narrative_enabled = narrative_enabled;
   }
 
@@ -498,51 +495,51 @@ public class AppProperties {
     this.lastn_enabled = lastn_enabled;
   }
 
-	public boolean getStore_resource_in_lucene_index_enabled() {
-		return store_resource_in_lucene_index_enabled;
-	}
+  public boolean getStore_resource_in_lucene_index_enabled() {
+    return store_resource_in_lucene_index_enabled;
+  }
 
-	public void setStore_resource_in_lucene_index_enabled(Boolean store_resource_in_lucene_index_enabled) {
-		this.store_resource_in_lucene_index_enabled = store_resource_in_lucene_index_enabled;
-	}
+  public void setStore_resource_in_lucene_index_enabled(Boolean store_resource_in_lucene_index_enabled) {
+    this.store_resource_in_lucene_index_enabled = store_resource_in_lucene_index_enabled;
+  }
 
-	public NormalizedQuantitySearchLevel getNormalized_quantity_search_level() {
-	return this.normalized_quantity_search_level;
+  public NormalizedQuantitySearchLevel getNormalized_quantity_search_level() {
+    return this.normalized_quantity_search_level;
   }
 
   public void setNormalized_quantity_search_level(NormalizedQuantitySearchLevel normalized_quantity_search_level) {
-	this.normalized_quantity_search_level = normalized_quantity_search_level;
+    this.normalized_quantity_search_level = normalized_quantity_search_level;
   }
 
-	public boolean getInstall_transitive_ig_dependencies() {
-		return install_transitive_ig_dependencies;
-	}
+  public boolean getInstall_transitive_ig_dependencies() {
+    return install_transitive_ig_dependencies;
+  }
 
-	public void setInstall_transitive_ig_dependencies(boolean install_transitive_ig_dependencies) {
-		this.install_transitive_ig_dependencies = install_transitive_ig_dependencies;
-	}
+  public void setInstall_transitive_ig_dependencies(boolean install_transitive_ig_dependencies) {
+    this.install_transitive_ig_dependencies = install_transitive_ig_dependencies;
+  }
 
-	public Integer getBundle_batch_pool_size() {
-		return this.bundle_batch_pool_size;
-	}
+  public Integer getBundle_batch_pool_size() {
+    return this.bundle_batch_pool_size;
+  }
 
-	public void setBundle_batch_pool_size(Integer bundle_batch_pool_size) {
-		this.bundle_batch_pool_size = bundle_batch_pool_size;
-	}
+  public void setBundle_batch_pool_size(Integer bundle_batch_pool_size) {
+    this.bundle_batch_pool_size = bundle_batch_pool_size;
+  }
 
-	public Integer getBundle_batch_pool_max_size() {
-		return bundle_batch_pool_max_size;
-	}
+  public Integer getBundle_batch_pool_max_size() {
+    return bundle_batch_pool_max_size;
+  }
 
-	public void setBundle_batch_pool_max_size(Integer bundle_batch_pool_max_size) {
-		this.bundle_batch_pool_max_size = bundle_batch_pool_max_size;
-	}
+  public void setBundle_batch_pool_max_size(Integer bundle_batch_pool_max_size) {
+    this.bundle_batch_pool_max_size = bundle_batch_pool_max_size;
+  }
 
-	public List<String> getLocal_base_urls() {
-		return local_base_urls;
-	}
+  public List<String> getLocal_base_urls() {
+    return local_base_urls;
+  }
 
-	public static class Cors {
+  public static class Cors {
     private Boolean allow_Credentials = true;
     private List<String> allowed_origin = ImmutableList.of("*");
 
@@ -561,7 +558,6 @@ public class AppProperties {
     public void setAllow_Credentials(Boolean allow_Credentials) {
       this.allow_Credentials = allow_Credentials;
     }
-
 
   }
 
@@ -605,7 +601,6 @@ public class AppProperties {
     }
   }
 
-
   public static class Tester {
 
     private String name;
@@ -646,8 +641,7 @@ public class AppProperties {
     }
   }
 
-  public static class ImplementationGuide
-  {
+  public static class ImplementationGuide {
     private String url;
     private String name;
     private String version;
@@ -711,6 +705,7 @@ public class AppProperties {
     public void setPartitioning_include_in_search_hashes(Boolean partitioning_include_in_search_hashes) {
       this.partitioning_include_in_search_hashes = partitioning_include_in_search_hashes;
     }
+
     public Boolean getAllow_references_across_partitions() {
       return allow_references_across_partitions;
     }
@@ -749,7 +744,6 @@ public class AppProperties {
     public void setEmail(Email email) {
       this.email = email;
     }
-
 
     public static class Email {
       public String getFrom() {

@@ -37,17 +37,15 @@ import static ca.uhn.fhir.util.TestUtil.waitForSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = Application.class, properties =
-  {
-     "spring.batch.job.enabled=false",
-     "spring.datasource.url=jdbc:h2:mem:dbr3",
-     "hapi.fhir.cql_enabled=true",
-     "hapi.fhir.fhir_version=dstu3",
-     "hapi.fhir.subscription.websocket_enabled=true",
-     "hapi.fhir.allow_external_references=true",
-     "hapi.fhir.allow_placeholder_references=true",
-  })
-
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = Application.class, properties = {
+    "spring.batch.job.enabled=false",
+    "spring.datasource.url=jdbc:h2:mem:dbr3",
+    "hapi.fhir.cql_enabled=true",
+    "hapi.fhir.fhir_version=dstu3",
+    "hapi.fhir.subscription.websocket_enabled=true",
+    "hapi.fhir.allow_external_references=true",
+    "hapi.fhir.allow_placeholder_references=true",
+})
 
 public class ExampleServerDstu3IT implements IServerSupport {
 
@@ -71,7 +69,7 @@ public class ExampleServerDstu3IT implements IServerSupport {
     ourClient.registerInterceptor(new LoggingInterceptor(true));
   }
 
-    @Test
+  @Test
   public void testCreateAndRead() {
 
     String methodName = "testCreateResourceConditional";
@@ -85,39 +83,47 @@ public class ExampleServerDstu3IT implements IServerSupport {
   }
 
   // Currently fails with:
-  // ca.uhn.fhir.rest.server.exceptions.InternalErrorException: HTTP 500 : Failed to call access method: java.lang.IllegalArgumentException: Could not load library source for libraries referenced in Measure/Measure/measure-EXM104-FHIR3-8.1.000/_history/1.
-  //@Test
+  // ca.uhn.fhir.rest.server.exceptions.InternalErrorException: HTTP 500 : Failed
+  // to call access method: java.lang.IllegalArgumentException: Could not load
+  // library source for libraries referenced in
+  // Measure/Measure/measure-EXM104-FHIR3-8.1.000/_history/1.
+  // @Test
   public void testCQLEvaluateMeasureEXM104() throws IOException {
     String measureId = "measure-EXM104-FHIR3-8.1.000";
 
     int numFilesLoaded = loadDataFromDirectory("dstu3/EXM104/EXM104_FHIR3-8.1.000-files");
-    //assertEquals(numFilesLoaded, 3);
+    // assertEquals(numFilesLoaded, 3);
     ourLog.info("{} files imported successfully!", numFilesLoaded);
-    //loadBundle("dstu3/EXM104/EXM104_FHIR3-8.1.000-bundle.json", ourCtx, ourClient);
+    // loadBundle("dstu3/EXM104/EXM104_FHIR3-8.1.000-bundle.json", ourCtx,
+    // ourClient);
 
     // http://localhost:8080/fhir/Measure/measure-EXM104-FHIR3-8.1.000/$evaluate-measure?periodStart=2019-01-01&periodEnd=2019-12-31
     Parameters inParams = new Parameters();
-//    inParams.addParameter().setName("measure").setValue(new StringType("Measure/measure-EXM104-8.2.000"));
-//    inParams.addParameter().setName("patient").setValue(new StringType("Patient/numer-EXM104-FHIR3"));
-//    inParams.addParameter().setName("periodStart").setValue(new StringType("2019-01-01"));
-//    inParams.addParameter().setName("periodEnd").setValue(new StringType("2019-12-31"));
+    // inParams.addParameter().setName("measure").setValue(new
+    // StringType("Measure/measure-EXM104-8.2.000"));
+    // inParams.addParameter().setName("patient").setValue(new
+    // StringType("Patient/numer-EXM104-FHIR3"));
+    // inParams.addParameter().setName("periodStart").setValue(new
+    // StringType("2019-01-01"));
+    // inParams.addParameter().setName("periodEnd").setValue(new
+    // StringType("2019-12-31"));
 
     Parameters outParams = ourClient
-      .operation()
-      .onInstance(new IdDt("Measure", measureId))
-      .named("$evaluate-measure")
-      .withParameters(inParams)
-      .cacheControl(new CacheControlDirective().setNoCache(true))
-      .withAdditionalHeader("Content-Type", "application/json")
-      .useHttpGet()
-      .execute();
+        .operation()
+        .onInstance(new IdDt("Measure", measureId))
+        .named("$evaluate-measure")
+        .withParameters(inParams)
+        .cacheControl(new CacheControlDirective().setNoCache(true))
+        .withAdditionalHeader("Content-Type", "application/json")
+        .useHttpGet()
+        .execute();
 
     List<Parameters.ParametersParameterComponent> response = outParams.getParameter();
     Assert.assertTrue(!response.isEmpty());
     Parameters.ParametersParameterComponent component = response.get(0);
     Assert.assertTrue(component.getResource() instanceof MeasureReport);
     MeasureReport report = (MeasureReport) component.getResource();
-    Assert.assertEquals("Measure/"+measureId, report.getMeasure());
+    Assert.assertEquals("Measure/" + measureId, report.getMeasure());
   }
 
   private int loadDataFromDirectory(String theDirectoryName) throws IOException {
@@ -172,14 +178,18 @@ public class ExampleServerDstu3IT implements IServerSupport {
     IIdType mySubscriptionId = methodOutcome.getId();
 
     // Wait for the subscription to be activated
-    waitForSize(1, () -> ourClient.search().forResource(Subscription.class).where(Subscription.STATUS.exactly().code("active")).cacheControl(new CacheControlDirective().setNoCache(true)).returnBundle(Bundle.class).execute().getEntry().size());
+    waitForSize(1,
+        () -> ourClient.search().forResource(Subscription.class).where(Subscription.STATUS.exactly().code("active"))
+            .cacheControl(new CacheControlDirective().setNoCache(true)).returnBundle(Bundle.class).execute().getEntry()
+            .size());
 
     /*
      * Attach websocket
      */
 
     WebSocketClient myWebSocketClient = new WebSocketClient();
-    SocketImplementation mySocketImplementation = new SocketImplementation(mySubscriptionId.getIdPart(), EncodingEnum.JSON);
+    SocketImplementation mySocketImplementation = new SocketImplementation(mySubscriptionId.getIdPart(),
+        EncodingEnum.JSON);
 
     myWebSocketClient.start();
     URI echoUri = new URI("ws://localhost:" + port + "/websocket");

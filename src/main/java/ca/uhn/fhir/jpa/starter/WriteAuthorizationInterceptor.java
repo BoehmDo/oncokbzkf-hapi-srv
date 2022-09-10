@@ -3,7 +3,6 @@ package ca.uhn.fhir.jpa.starter;
 import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.rest.server.interceptor.auth.IAuthRule;
 import ca.uhn.fhir.rest.server.interceptor.auth.RuleBuilder;
-import net.sf.saxon.expr.TryCatch;
 import ca.uhn.fhir.rest.server.interceptor.auth.AuthorizationInterceptor;
 
 import java.util.Base64;
@@ -33,8 +32,8 @@ public class WriteAuthorizationInterceptor extends AuthorizationInterceptor {
       // In this basic example we have two hardcoded bearer tokens,
       // one which is for a user that has access to one patient, and
       // another that has full access.
-      String userId = null;
-      boolean userIsAdmin = false;
+      boolean writeAuthorized = false;
+      boolean readAuthorized = false;
       String authHeader = theRequestDetails.getHeader("Authorization");
       String[] credentials = new String[2];
 
@@ -52,8 +51,8 @@ public class WriteAuthorizationInterceptor extends AuthorizationInterceptor {
        */
       Map<String, String> writeUserMap = new HashMap<String, String>();
       Map<String, String> readUserMap = new HashMap<String, String>();
-      Path writeCredPath = Paths.get("/data/writecredentials.json");
-      Path readCredPath = Paths.get("/data/readcredentials.json");
+      Path writeCredPath = Paths.get("/config/writecredentials.json");
+      Path readCredPath = Paths.get("/config/readcredentials.json");
       String writeCredFileString = null;
       String readCredFileString = null;
       try {
@@ -79,13 +78,14 @@ public class WriteAuthorizationInterceptor extends AuthorizationInterceptor {
 
       if (!writeUserMap.isEmpty() && checkCredentials(writeUserMap, credentials)) {
          // This user has access to everything
-         userId = credentials[0];
-         userIsAdmin = true;
-      } else if (!readUserMap.isEmpty() && checkCredentials(readUserMap, credentials)) {
+         writeAuthorized = true;
+         readAuthorized = true;
 
+      } else if (!readUserMap.isEmpty() && checkCredentials(readUserMap, credentials)) {
+         readAuthorized = true;
       }
 
-      if (userId != null && !userIsAdmin) {
+      if (!writeAuthorized && readAuthorized) {
 
          return new RuleBuilder()
                .allow().read().allResources().withAnyId().andThen()
@@ -94,7 +94,7 @@ public class WriteAuthorizationInterceptor extends AuthorizationInterceptor {
       }
 
       // If the user is an admin, allow everything
-      if (userIsAdmin) {
+      if (writeAuthorized && readAuthorized) {
          return new RuleBuilder()
                .allowAll()
                .build();

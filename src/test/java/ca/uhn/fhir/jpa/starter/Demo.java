@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 
-@ServletComponentScan(basePackageClasses = {JpaRestfulServer.class})
+@ServletComponentScan(basePackageClasses = { JpaRestfulServer.class })
 @SpringBootApplication(exclude = ElasticsearchRestClientAutoConfiguration.class)
 public class Demo {
 
@@ -15,6 +15,6 @@ public class Demo {
     System.setProperty("spring.batch.job.enabled", "false");
     SpringApplication.run(Demo.class, args);
 
-    //Server is now accessible at eg. http://localhost:8080/fhir/metadata
+    // Server is now accessible at eg. http://localhost:8080/fhir/metadata
   }
 }

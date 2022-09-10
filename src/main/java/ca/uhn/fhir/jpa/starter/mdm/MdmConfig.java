@@ -20,11 +20,12 @@ import java.io.IOException;
 
 @Configuration
 @Conditional(MdmConfigCondition.class)
-@Import({MdmConsumerConfig.class, MdmSubmitterConfig.class})
+@Import({ MdmConsumerConfig.class, MdmSubmitterConfig.class })
 public class MdmConfig {
 
 	@Bean
-	IMdmSettings mdmSettings(@Autowired MdmRuleValidator theMdmRuleValidator, AppProperties appProperties) throws IOException {
+	IMdmSettings mdmSettings(@Autowired MdmRuleValidator theMdmRuleValidator, AppProperties appProperties)
+			throws IOException {
 		DefaultResourceLoader resourceLoader = new DefaultResourceLoader();
 		Resource resource = resourceLoader.getResource("mdm-rules.json");
 		String json = IOUtils.toString(resource.getInputStream(), Charsets.UTF_8);
