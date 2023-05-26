@@ -19,6 +19,8 @@ import java.lang.reflect.Type;
 import com.google.gson.Gson;
 import com.google.gson.reflect.*;
 
+import org.apache.commons.codec.digest.MessageDigestAlgorithms.*;
+
 @SuppressWarnings("ConstantConditions")
 public class WriteAuthorizationInterceptor extends AuthorizationInterceptor {
 
@@ -35,7 +37,8 @@ public class WriteAuthorizationInterceptor extends AuthorizationInterceptor {
       boolean writeAuthorized = false;
       boolean readAuthorized = false;
       String authHeader = theRequestDetails.getHeader("Authorization");
-      String[] credentials = new String[2];
+      String password = "";
+      String user = "";
 
       if (authHeader != null && authHeader.toLowerCase().startsWith("basic")) {
          // Authorization: Basic base64credentials
@@ -43,7 +46,9 @@ public class WriteAuthorizationInterceptor extends AuthorizationInterceptor {
          byte[] credDecoded = Base64.getDecoder().decode(base64Credentials);
          String strCred = new String(credDecoded, StandardCharsets.UTF_8);
          // credentials = username:password
-         credentials = strCred.split(":", 2);
+         String[] credentials = strCred.split(":", 2);
+         user = credentials[0];
+         password = credentials[1];
       }
 
       /*
@@ -76,12 +81,12 @@ public class WriteAuthorizationInterceptor extends AuthorizationInterceptor {
          readUserMap = gson.fromJson(readCredFileString, collectionType);
       }
 
-      if (!writeUserMap.isEmpty() && checkCredentials(writeUserMap, credentials)) {
+      if (!writeUserMap.isEmpty() && checkCredentials(writeUserMap, user, password)) {
          // This user has access to everything
          writeAuthorized = true;
          readAuthorized = true;
 
-      } else if (!readUserMap.isEmpty() && checkCredentials(readUserMap, credentials)) {
+      } else if (!readUserMap.isEmpty() && checkCredentials(readUserMap, user, password)) {
          readAuthorized = true;
       }
 
@@ -106,11 +111,12 @@ public class WriteAuthorizationInterceptor extends AuthorizationInterceptor {
             .build();
    }
 
-   private boolean checkCredentials(Map<String, String> validUserMap, String[] credentials) {
-      if (validUserMap.containsKey(credentials[0]) && validUserMap.get(credentials[0]).equals(credentials[1])) {
-         return true;
-      } else {
+   private boolean checkCredentials(Map<String, String> validUserMap, String user, String password) {
+      if (!validUserMap.containsKey(user)) {
          return false;
-      }
+      } 
+
+      String PW_Hash = org.apache.commons.codec.digest.DigestUtils.sha256(password).toString();
+      return PW_Hash == validUserMap.get(user);
    }
 }
